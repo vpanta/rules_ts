@@ -109,7 +109,7 @@ function createFilesystemTree(root, inputs) {
             if (!node) {
                 // It is not likely to end up here unless fstree does something undesired. 
                 // So we'll let it hard fail 
-                throw new Error(`Could not find ${p}`);
+                            throw new Error(`tsc tried to read file (${filePath}) that wasn't an input or output to it.`); Error(`Could not find ${p}`);
             }
             track = {parent: track, segment: part, node: node }
         }
@@ -458,7 +458,7 @@ function createProgram(args, initialInputs) {
         const relative = path.relative(execRoot, filePath);
         // external lib are transitive sources thus not listed in the inputs map reported by bazel.
         if (!filesystemTree.fileExists(path.relative(execRoot, filePath)) && !isExternalLib(filePath) && !outputs.has(relative)) {
-            throw new Error(`tsc tried to read file that wasn't an input to it.`);
+            throw new Error(`tsc tried to read file (${filePath}) that wasn't an input or output to it.`);
         }
         return ts.sys.readFile(filePath, encoding);
     }
